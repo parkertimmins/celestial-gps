@@ -276,16 +276,10 @@ class CameraView extends React.Component {
             return;
         }
 
-        // iphone request ask permission before enumerating devices
         navigator.mediaDevices
-            .getUserMedia({ video: true })
-            .then(() => {
-                navigator.mediaDevices
-                    .enumerateDevices()
-                    .then(this.addVideoDevicesToCameraList)
-                    .then(this.setSelectedStream) // ????
-                    .catch(console.error);
-            })
+            .enumerateDevices()
+            .then(this.addVideoDevicesToCameraList)
+            .then(this.setSelectedStream) // ????
     }
 
     setSelectedStream() {
@@ -298,15 +292,15 @@ class CameraView extends React.Component {
             window.stream.getTracks().forEach(track => track.stop())
         }
 
-        const constraints = {
-            video: { deviceId: this.cameras[this.selectedCameraIdx].deviceId  }
-        };
+        const deviceId = this.cameras[this.selectedCameraIdx].deviceId
+        console.log("Selected camera with deviceId", deviceId) 
+        const constraints = { video: { deviceId } };
 
         return navigator.mediaDevices
             .getUserMedia(constraints)
             .then(stream => {
-                  window.stream = stream; // make stream available to console
-                  this.videoRef.current.srcObject = stream;
+                window.stream = stream; // make stream available to console
+                this.videoRef.current.srcObject = stream;
             })
     }
 
