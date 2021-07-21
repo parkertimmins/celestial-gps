@@ -18,11 +18,11 @@ Local Debug Android
 * Turn on USB debugging in settings
 * Plug phone into computer usb
 * Open Android System alert for usb options
-** Select PTP usb option
+    * Select PTP usb option
 * Navigate in Chrome to chrome://inspect/#devices
 * Open Port Fowarding
-** Add mapping from 8080 to localhost:8080 (only have to do once)
+    * Add mapping from 8080 to localhost:8080 (only have to do once)
 * Open chrome browser on phone
 * From computer chrome device inspect page
-** Enter http://localhost:8080/celestial-gps/index.html into "Open tab with url" box and click open
-** Click inspect on new url to watch debug logs while interacting on phone
+    * Enter http://localhost:8080/celestial-gps/index.html into "Open tab with url" box and click open
+    * Click inspect on new url to watch debug logs while interacting on phone
