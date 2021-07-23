@@ -19,13 +19,14 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            needUserPermission: true,
+            displayHelpModal: true,
             cameraVisible: true,
             estimatedLocations: [],
             celestialLocation: null
         };
 	    this.altAz = null;
 
+        this.toggleHelpModal = this.toggleHelpModal.bind(this);
         this.toggleCameraMap = this.toggleCameraMap.bind(this);
         this.findByMoon = this.findByMoon.bind(this);
         this.findBySun = this.findBySun.bind(this);
@@ -55,25 +56,14 @@ class App extends React.Component {
         this.setState({ celestialLocation: markerLatLong(reading.celestial) })
     }
 
-    
 
     toggleCameraMap() {
         this.setState({ cameraVisible: !this.state.cameraVisible })
     }
 
-    isIOS() {
-        return /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
-
-    }
-
-    givePermission() {
-        this.setState({ needUserPermission: false })
-
-        if (this.isIOS()) {
-            this.startIphoneOrientationSensor();
-        } else {
-            this.startAndroidOrientationSensor();
-        }
+    toggleHelpModal() {
+        console.log("Toggle help")
+        this.setState({ displayHelpModal: !this.state.displayHelpModal })
     }
 
     startAndroidOrientationSensor() {
@@ -86,36 +76,19 @@ class App extends React.Component {
         });
     }
 
-    startIphoneOrientationSensor() {
-        console.log("Initializing sensor for iPhone");
-        
-        // feature detect
-        if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-            DeviceOrientationEvent.requestPermission()
-                .then(permissionState => {
-                    if (permissionState === 'granted') {
-                        window.addEventListener('deviceorientation', () => {
-                            this.altAz = computeAltAzFromABG(event.alpha, event.beta, event.gamma, event.webkitCompassHeading);
-                        });
-                    }
-                })
-                .catch(console.error);
-        } else {
-            alert("DeviceOrientation not available");
-          // handle regular non iOS 13+ devices
-        }
+    componentDidMount() {
+        this.startAndroidOrientationSensor();
     }
 
-
     render() {
-        if (this.state.needUserPermission) {
-            return <RequestPermsModal givePermission={() => this.givePermission()} />
+        if (this.state.displayHelpModal) {
+            return <HelpModal toggleHelpModal={this.toggleHelpModal} />
         } 
       
         return ( 
             <>
                 <Tab hidden={!this.state.cameraVisible}>          
-                    <CameraView toggleCameraMap={this.toggleCameraMap} findByMoon={this.findByMoon} findBySun={this.findBySun} /> 
+                    <CameraView toggleCameraMap={this.toggleCameraMap} toggleHelpModal={this.toggleHelpModal} findByMoon={this.findByMoon} findBySun={this.findBySun} /> 
                 </Tab>
                 
                 <Tab hidden={this.state.cameraVisible}>
@@ -140,12 +113,19 @@ function Tab(props) {
   );
 }
 
-function RequestPermsModal(props) {
+function HelpModal(props) {
     return (
-        <div id="request-perms-modal">
-            <div id="modal-content">
-                <button id="request-perms" onClick={props.givePermission}>Allow orientation sensor</button>
-            </div> 
+        <div id="help-modal">
+            <div className="top-row control-row help-button-row">
+                <button className="round-button flex-item-right" title="Close help text" onClick={props.toggleHelpModal}>❌</button>
+            </div>
+            <div id="help-text">
+                <h4>Celestial GPS</h4>
+                Welcome to Celestial GPS! This is a tool for finding your location on earth by taking sightings of the sun or moon. It uses your phone's orientation sensor, compass, and camera. It does not use the GPS. Only Android phones and the Chrome browser are supported. The tool is not very accurate, but should be within a few hundred kilometers of your actual position. Be VERY careful if you use the sun sighting mode ... never look into the sun!
+
+                <h4>How to use</h4>
+                After closing this help page, you'll be asked for permission to use your phone's camera. After giving permission, the view from one of the cameras should appear. If the camera image is not from the back camera, click 🔄 to switch. Now aim the phone at the Moon, so that it is right in the crosshairs. Click 🌘 to take a location sighting based on the Moon. Now click 🌎 to switch to the Map. A pin will show up on the map where the tool thinks you are. Try clicking the Moon button multiple times with the phone in different orientations (portrait, landscape, upside down), you will find that some orientations provide more accurate sightings.
+            </div>
         </div> 
     );
 }
@@ -349,6 +329,7 @@ class CameraView extends React.Component {
             <div>
                 <div className="top-row control-row">
                     <button  className="round-button" title="Go to Map view" onClick={this.props.toggleCameraMap}>🌎</button>
+                    <button  className="round-button" title="Open help text" onClick={this.props.toggleHelpModal}>❔</button>
                 </div>
                 
                 <div id="camera-image" className="fullscreen-pane"> 
