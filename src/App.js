@@ -289,10 +289,21 @@ class CameraView extends React.Component {
         setTimeout(this.setCanvasToVideo, 10);
     }
 
+    copyVideoFrameZoomed(canvas, ctx, video, zoomFactor) {
+        const videoZoomWidth = video.videoWidth * 1.0 / zoomFactor;
+        const videoZoomHeight = video.videoHeight * 1.0 / zoomFactor;
+        const videoOffsetX = (video.videoWidth - videoZoomWidth) / 2;
+        const videoOffsetY = (video.videoHeight- videoZoomHeight) / 2;
+        const canvasOffsetX = 0;
+        const canvasOffsetY = 0;
+        ctx.drawImage(video, videoOffsetX, videoOffsetY, videoZoomWidth, videoZoomHeight, canvasOffsetX, canvasOffsetY, canvas.width, canvas.height);
+    }
+
     copyVideoToCanvas() {
         const canvas = this.canvasRef.current;
         const video = this.videoRef.current;
-        
+       
+ 
         // should probably not do every frame ¯\_(ツ)_/¯
         this.setCanvasDimensions();
         
@@ -302,9 +313,8 @@ class CameraView extends React.Component {
     
         const ctx = canvas.getContext("2d");
         
-        // first copy frame from video element to canvas
-        ctx.drawImage(video, 0, 0);
-
+        this.copyVideoFrameZoomed(canvas, ctx, video, 3); 
+        
         ctx.strokeStyle = "white";
         ctx.lineWidth = 1 
         ctx.beginPath();
