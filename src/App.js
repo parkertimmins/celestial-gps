@@ -313,7 +313,7 @@ class CameraView extends React.Component {
     
         const ctx = canvas.getContext("2d");
         
-        this.copyVideoFrameZoomed(canvas, ctx, video, 3); 
+        this.copyVideoFrameZoomed(canvas, ctx, video, 1.5); 
         
         ctx.strokeStyle = "white";
         ctx.lineWidth = 1 
