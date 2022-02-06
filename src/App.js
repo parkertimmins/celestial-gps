@@ -1,13 +1,11 @@
 
 import React from 'react';
+
 import 'leaflet/dist/leaflet.css';
 import 'leaflet/dist/images/layers-2x.png';
 import 'leaflet/dist/images/layers.png';
-import 'leaflet/dist/images/marker-icon-2x.png';
-import 'leaflet/dist/images/marker-icon.png';
-import 'leaflet/dist/images/marker-shadow.png';
-
-
+import markerIconPng from "leaflet/dist/images/marker-icon.png"
+import {Icon} from 'leaflet'
 import { Map, Marker, Popup, TileLayer, GeoJSON } from 'react-leaflet'
 import { julianCenturies, toJulian } from './js/julian';
 import { Moon } from './js/moon';
@@ -199,7 +197,7 @@ class MapView extends React.Component {
 }
 
 function LocationMarker({ keyValue, position, label}) {
-    return <Marker key={keyValue} position={position}>
+    return <Marker key={keyValue} position={position} icon={new Icon({iconUrl: markerIconPng, iconSize: [25, 41], iconAnchor: [12, 41]})}>
                 <Popup closeOnClick={false} autoClose={false}>
                     <span>{label}: {position[0]}, {position[1]}</span>
                 </Popup>
