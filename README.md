@@ -4,6 +4,7 @@ This is a webapp which can be used on a smart phone to find your location on ear
 
 Run locally
 * `npm run start:dev`
+* Access page: http://localhost:8080/celestial-gps/index.html
 
 Build 
 * `npm run build`
@@ -15,6 +16,7 @@ Build and deploy to Github pages:
 
 Local Debug Android
 * Enable developer mode on phone
+	* On my phone: Settings > About Phone > Build number (tap 7 times) > enter screen lock pin
 * Turn on USB debugging in settings
 * Plug phone into computer usb
 * Open Android System alert for usb options
