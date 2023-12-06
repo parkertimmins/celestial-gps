@@ -1,6 +1,7 @@
 # celestial-gps
 
-This is a webapp which can be used on a smart phone to find your location on earth by taking sightings of the moon or sun. It requires permissions for your camera and phone orientation.
+[celestial-gps](https://github.com/parkertimmins/celestial-gps) is a webapp which can be used on a smart phone to find your location on earth by taking sightings of the moon or sun. It requires permissions for your camera and phone orientation.
+
 
 Run locally
 * `npm run start:dev`
